@@ -1,6 +1,5 @@
 import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 
-import { SliderProps } from './Slider';
 import {
   asc,
   clamp,
@@ -12,7 +11,8 @@ import {
   roundValueToStep,
   setValueIndex,
   trackFinger,
-} from './utils';
+} from './helpers';
+import { SliderProps } from './Slider';
 
 type PositionType = {
   x: number;
@@ -119,7 +119,9 @@ export default (props: SliderProps, { clearActive }: { clearActive: () => void }
         return;
       }
 
-      const { newValue, activeIndex } = getFingerNewValue(finger, true, valueDerivedRef.current)!;
+      const fingerNewValue = getFingerNewValue(finger, true, valueDerivedRef.current);
+      if (!fingerNewValue) return;
+      const { newValue, activeIndex } = fingerNewValue;
 
       if (!dragging && moveCount.current > 2) {
         setDragging(true);
@@ -145,7 +147,8 @@ export default (props: SliderProps, { clearActive }: { clearActive: () => void }
         const rect = (activeIndex || !range.current
           ? pointValueTwo
           : pointValueOne
-        ).current!.getBoundingClientRect();
+        ).current?.getBoundingClientRect();
+        if (!rect) return;
         setPopoverPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
       }
     },
@@ -160,7 +163,9 @@ export default (props: SliderProps, { clearActive }: { clearActive: () => void }
 
       if (!finger) return;
 
-      const { newValue, activeIndex } = getFingerNewValue(finger, true, valueDerivedRef.current)!;
+      const fingerNewValue = getFingerNewValue(finger, true, valueDerivedRef.current);
+      if (!fingerNewValue) return;
+      const { newValue, activeIndex } = fingerNewValue;
 
       if (onChangeCommitted) {
         onChangeCommitted(nativeEvent, Array.isArray(newValue) ? newValue : [newValue]);
@@ -184,7 +189,9 @@ export default (props: SliderProps, { clearActive }: { clearActive: () => void }
 
       if (!finger) return;
 
-      const { newValue, activeIndex } = getFingerNewValue(finger, false, valueDerivedRef.current)!;
+      const fingerNewValue = getFingerNewValue(finger, true, valueDerivedRef.current);
+      if (!fingerNewValue) return;
+      const { newValue, activeIndex } = fingerNewValue;
 
       setValueState(newValue);
 
@@ -202,7 +209,8 @@ export default (props: SliderProps, { clearActive }: { clearActive: () => void }
       const rect = (activeIndex || !range.current
         ? pointValueTwo
         : pointValueOne
-      ).current!.getBoundingClientRect();
+      ).current?.getBoundingClientRect();
+      if (!rect) return;
       setPopoverPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
     },
     [getFingerNewValue],

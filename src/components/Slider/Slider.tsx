@@ -6,9 +6,9 @@ import { cn } from '../../utils/bem';
 import { Popover } from '../Popover/Popover';
 import { Text } from '../Text/Text';
 
+import { checkFill, getPercent } from './helpers';
 import useActive from './useActive';
 import useSlider from './useSlider';
-import { checkFill, getPercent } from './utils';
 
 export type SliderProps = {
   className?: string;
@@ -80,6 +80,8 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>((props, ref)
         </div>
       )}
       <div
+        tabIndex={0}
+        role="button"
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
         ref={sliderRef}
@@ -126,6 +128,8 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>((props, ref)
         {range.current && (
           <>
             <button
+              type="button"
+              aria-label="Left pin"
               onMouseDown={() => setIsActiveOne(true)}
               onTouchStart={() => setIsActiveOne(true)}
               className={cnSlider('point', { isActive: isActiveOne || isActiveTwo, disabled })}
@@ -155,6 +159,8 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>((props, ref)
           </>
         )}
         <button
+          type="button"
+          aria-label="Right pin"
           onMouseDown={() => setIsActiveTwo(true)}
           onTouchStart={() => setIsActiveTwo(true)}
           className={cnSlider('point', { isActive: isActiveOne || isActiveTwo, disabled })}
