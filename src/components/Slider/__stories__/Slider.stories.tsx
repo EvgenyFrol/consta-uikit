@@ -9,23 +9,16 @@ import {
   eventInterceptorMap,
   EventInterceptorProvider,
 } from '../../EventInterceptor/EventInterceptor';
-import { TextField } from '../../TextField/TextField';
-import {
-  Slider,
-  sliderPropColor,
-  sliderPropColorDefault,
-  sliderPropSize,
-  sliderPropSizeDefault,
-} from '../Slider';
+import { TextField, textFieldPropSize, textFieldPropSizeDefault } from '../../TextField/TextField';
+import { Slider } from '../Slider';
 
 import mdx from './Slider.docs.mdx';
 
 const defaultKnobs = () => ({
   disabled: boolean('disabled', false),
   division: boolean('division', true),
-  size: select('Size', sliderPropSize, sliderPropSizeDefault),
-  color: select('color', sliderPropColor, sliderPropColorDefault),
   classname: text('classname', 'inputRange'),
+  size: select('size', textFieldPropSize, textFieldPropSizeDefault),
   step: number('step', 25),
   customStep: boolean('customStep', false),
   min: number('minValue', -50),
